@@ -1,4 +1,6 @@
+const Joi = require('joi');
 const { pool } = require('../config/dataBase');
+
 
 module.exports = {
     name: "vehiculos",
@@ -12,13 +14,41 @@ module.exports = {
                     return 'Estas en la sección de Vehículos!'
                 },
                 options:{
-                    description: 'Pagina inicial de los vehículos',
-                    tags:['api', 'Inicio']
+                    description: 'Servicio para validar conexión con vehículos',
+                    tags:['api', 'Inicio'],
+                    notes: ['Este servicio fue creado con la finalidad de validar la conexion de los servicios del vehículos'],
+                    
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Estas en la sección de Vehículos!'}, // pass-through "No Content" to swagger definition
+                                400: {
+                                    description: 'Something wrong happened'
+                                }
+                            }
+                        }
+                    },
+                    
                 }
             },
             {
                 method: "GET",                                  // Peticion de los Vehículos
                 path: "/api/vehiculos",
+                options:{
+                    description: 'Traer los Vehículos de la base de datos',
+                    tags:['api', 'Inicio', 'Vehículos'],
+                    notes: ['Este servicio trae los vehículos que se encuentan almacenados en la base de datos'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                400: {
+                                    description: 'No se pudieron consultar los vehículos de la base de datos'
+                                }
+                            }
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -32,10 +62,6 @@ module.exports = {
                         cliente.release(true)
                     }
                 },
-                options:{
-                    description: 'Traer los Vehículos de la base de datos',
-                    tags:['api', 'Inicio']
-                }
             },
             {
                 method: "POST",                                 // Agregar un Vehículo
@@ -68,6 +94,22 @@ module.exports = {
                 options:{
                     description: 'Agregar un Vehículo',
                     tags:['api', 'Vehículos'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudo agregar un vehículo a la base de datos'
+                                }
+                            },
+                            response:{
+                                200: 
+                                    `casa:"Grande",
+                                    carro:"pequeño"`
+                                
+                            }
+                        }
+                    },
                 }
             },
             {
