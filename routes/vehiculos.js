@@ -10,26 +10,21 @@ module.exports = {
             {
                 method: "GET",
                 path: "/api/vehiculo",
-                handler: (request, h) => {
-                    return 'Estas en la sección de Vehículos!'
-                },
                 options:{
                     description: 'Servicio para validar conexión con vehículos',
-                    tags:['api', 'Inicio'],
+                    tags:['api', 'Inicio', 'Vehículos'],
                     notes: ['Este servicio fue creado con la finalidad de validar la conexion de los servicios del vehículos'],
-                    
                     plugins: {
                         'hapi-swagger': {
                             responses: {
-                                200: {description: 'Estas en la sección de Vehículos!'}, // pass-through "No Content" to swagger definition
-                                400: {
-                                    description: 'Something wrong happened'
-                                }
+                                200: {description: 'Estas en la sección de Vehículos!'},
                             }
                         }
                     },
-                    
-                }
+                },
+                handler: (request, h) => {
+                    return 'Estas en la sección de Vehículos!'
+                },
             },
             {
                 method: "GET",                                  // Peticion de los Vehículos
@@ -42,7 +37,7 @@ module.exports = {
                         'hapi-swagger': {
                             responses: {
                                 200: {description: 'Respuesta positiva del servidor'},
-                                400: {
+                                508: {
                                     description: 'No se pudieron consultar los vehículos de la base de datos'
                                 }
                             }
@@ -57,7 +52,7 @@ module.exports = {
                         
                     } catch (err) {
                         console.log({ err })
-                        return h.code(508).response({ error: 'No se pudieron consultar los vehículos de la base de datos' })
+                        return h.response({ error: 'No se pudieron consultar los vehículos de la base de datos' }).code(508)
                     } finally {
                         cliente.release(true)
                     }
@@ -66,6 +61,20 @@ module.exports = {
             {
                 method: "POST",                                 // Agregar un Vehículo
                 path: "/api/vehiculos",
+                options:{
+                    description: 'Agregar un Vehículo',
+                    tags:['api', 'Vehículos'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudo agregar un vehículo a la base de datos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                         const vehiculo = {
@@ -91,30 +100,24 @@ module.exports = {
                         return h.response({ error: 'No se pudo agregar un vehículo a la base de datos' }).code(508);
                     }
                 },
+            },
+            {
+                method: "PATCH",                                 // Editar un Vehículo
+                path: "/api/vehiculos/{placa}",
                 options:{
-                    description: 'Agregar un Vehículo',
-                    tags:['api', 'Vehículos'],
+                    description: 'Editar un Vehículo',
+                    tags:['api', 'Vehículos', 'PATCH'],
                     plugins: {
                         'hapi-swagger': {
                             responses: {
                                 200: {description: 'Respuesta positiva del servidor'},
                                 508: {
-                                    description: 'No se pudo agregar un vehículo a la base de datos'
+                                    description: 'No se puede editar el vehículo'
                                 }
                             },
-                            response:{
-                                200: 
-                                    `casa:"Grande",
-                                    carro:"pequeño"`
-                                
-                            }
                         }
                     },
-                }
-            },
-            {
-                method: "PATCH",                                 // Editar un Vehículo
-                path: "/api/vehiculos/{placa}",
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     
@@ -144,6 +147,20 @@ module.exports = {
             {
                 method: 'DELETE',                                   // Eliminar un vehiculo
                 path: '/api/vehiculos/{placa}',
+                options:{
+                    description: 'Eliminar un Vehículo',
+                    tags:['api', 'Vehículos', 'DELETE'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudó eliminar el vehículo'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async( request, h ) =>{
                     let cliente = await pool.connect();
                     const { placa } = request.params;
@@ -156,7 +173,7 @@ module.exports = {
                         return h.response({ error: 'No se pudó eliminar el vehículo' }).code(508);
                     }
                 }
-            }
+            },
         ]);
 
     },

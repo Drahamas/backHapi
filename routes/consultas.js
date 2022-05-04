@@ -8,6 +8,17 @@ module.exports = {
             {
                 method: "GET",
                 path: "/api/consulta",
+                options:{
+                    description: 'Comprobar conexión con consultas',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                            },
+                        }
+                    },
+                },
                 handler: (request, h) => {
                     return 'Estas en la sección de Consultas!'
                 }
@@ -15,6 +26,20 @@ module.exports = {
             {
                 method: "GET",                                              // Constultar modelos (Mayor y menor)
                 path: "/api/consulta/modelos",
+                options:{
+                    description: 'Constultar modelos (Mayor y menor)',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudieron consultar los modelos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -31,6 +56,20 @@ module.exports = {
             {
                 method: "GET",                                      // Vehículos según el rango de fecha del seguro
                 path: "/api/consulta/entre-fechas-seguro/{fecha1}/{fecha2}",
+                options:{
+                    description: 'Vehículos según el rango de fecha del seguro',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudieron el consultar los vehículos segun el rango del vencimiento del seguro'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     const { fecha1, fecha2 } = request.params
@@ -46,8 +85,22 @@ module.exports = {
                 }
             },
             {
-                method: "GET",                                      // vehículos según el rango de modelo
+                method: "GET",                                      // Vehículos según el rango de modelo
                 path: "/api/consulta/entre-modelos/{fecha1}/{fecha2}",
+                options:{
+                    description: 'Vehículos según el rango de modelo',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudieron consultar vehículos segun la fecha de los modelos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     const { fecha1, fecha2 } = request.params
@@ -65,6 +118,20 @@ module.exports = {
             {
                 method: "GET",                      // Consulta de la placa, modelo descripción de la línea y descripción del modelo (línea este activa)
                 path: "/api/consulta/pla-mod-desl-desm",
+                options:{
+                    description: 'Consulta de la placa, modelo descripción de la línea y descripción del modelo (línea este activa)',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se puede realizar la consulta que solicita'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     const { fecha1, fecha2 } = request.params
@@ -78,7 +145,7 @@ module.exports = {
                         return result.rows
                     } catch (err) {
                         console.log({ err })
-                        return h.code(510).response({ error: 'No se realizar la consulta que solicita' })
+                        return h.code(510).response({ error: 'No se puede realizar la consulta que solicita' })
                     } finally {
                         cliente.release(true)
                     }
@@ -87,6 +154,20 @@ module.exports = {
             {
                 method: "GET",                                      // Suma de los modelos
                 path: "/api/consulta/suma-modelo",
+                options:{
+                    description: 'Suma de los modelos',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudo consultar la sumatoria de los modelos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -103,6 +184,20 @@ module.exports = {
             {
                 method: "GET",                                      // Promedio de los modelos
                 path: "/api/consulta/prom-modelo",
+                options:{
+                    description: 'Promedio de los modelos',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudo consultar el promedio de los modelos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -119,6 +214,20 @@ module.exports = {
             {
                 method: "GET",                                      // Lineas activas e inactivas
                 path: "/api/consulta/linea-activa-inactiva",
+                options:{
+                    description: 'Lineas activas e inactivas',
+                    tags:['api', 'Consultas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                510: {
+                                    description: 'No se pudo consultar las líneas activas e inactivas'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -126,7 +235,7 @@ module.exports = {
                         return result.rows
                     } catch (err) {
                         console.log({ err })
-                        return h.code(510).response({ error: 'No se pudo consultar el promedio de los modelos' })
+                        return h.code(510).response({ error: 'No se pudo consultar las líneas activas e inactivas' })
                     } finally {
                         cliente.release(true)
                     }

@@ -8,6 +8,17 @@ module.exports = {
             {
                 method: "GET",
                 path: "/api/marca",
+                options:{
+                    description: 'Servicio para validar conexión con marca',
+                    tags:['api', 'Marca'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                            },
+                        }
+                    },
+                },
                 handler: (request, h) => {
                     return 'Estas en la sección de Marcas!'
                 }
@@ -15,6 +26,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las marcas
                 path: "/api/marcas",
+                options:{
+                    description: 'Peticion de las marcas',
+                    tags:['api', 'Marcas'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las marcas de la base de datos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -32,6 +57,20 @@ module.exports = {
             {
                 method: "PATCH",                                 // Editar una Marca
                 path: "/api/marcas/{id}",
+                options:{
+                    description: 'Editar una marca',
+                    tags:['api', 'Marcas', 'PATCH'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las marcas de la base de datos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     
@@ -49,7 +88,6 @@ module.exports = {
 
                         await cliente.query(`UPDATE marcas SET ${fieldsQuery.join()} WHERE id = '${id}'`);
                         const marcas = await cliente.query(`SELECT * FROM marcas WHERE id = '${id}';`);
-                        
                         return marcas.rows
                         
                     } catch (error) {
@@ -61,6 +99,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las marcas activas
                 path: "/api/marcas/activas",
+                options:{
+                    description: 'Peticion de las marcas activas',
+                    tags:['api', 'Marcas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las marcas activas'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -78,6 +130,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las marcas inactivas
                 path: "/api/marcas/inactivas",
+                options:{
+                    description: 'Peticion de las marcas inactivas',
+                    tags:['api', 'Marcas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las marcas inactivas'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -95,6 +161,20 @@ module.exports = {
             {
                 method: "POST",                                 // Agregar una Marca
                 path: "/api/marcas",
+                options:{
+                    description: 'Agregar una Marca',
+                    tags:['api', 'Marcas', 'POST'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudó agregar una marca'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     const { nombre } = request.payload

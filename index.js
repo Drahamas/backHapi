@@ -45,24 +45,15 @@ const init = async() =>{
     server.route({
         method: 'GET',
         path: '/',
+        options: {
+            description: 'Comprobar conexión con el servior',
+            tags: ['api', 'Inicio', 'Index'],
+            
+        },
         handler: (request, h) => {
-
             return 'Hello World!';
         },
-        options:{
-            description: 'Pagina inicial',
-            tags:['api', 'Inicio']
-        }
     },
-    {
-        options: {
-            description: 'Confirmación del servidor',
-            tags: ['api', '/'],
-            parameters: {placa: "placa"},
-            Response: 
-                {'200': {description: 'Operacion correcta'}}
-        }
-    }
     );
 
     await server.register([

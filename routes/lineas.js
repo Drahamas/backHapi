@@ -8,6 +8,17 @@ module.exports = {
             {
                 method: "GET",
                 path: "/api/linea",
+                options:{
+                    description: 'Comprobar conexión con lineas',
+                    tags:['api', 'Linea', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                            },
+                        }
+                    },
+                },
                 handler: (request, h) => {
                     return 'Estas en la sección de Lineas!'
                 }
@@ -15,6 +26,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las marcas
                 path: "/api/lineas",
+                options:{
+                    description: 'Peticion de las marcas',
+                    tags:['api', 'Lineas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las lineas de la base de datos'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -32,6 +57,20 @@ module.exports = {
             {
                 method: "PATCH",                                 // Editar una Linea
                 path: "/api/lineas/{id}",
+                options:{
+                    description: 'Editar una Linea',
+                    tags:['api', 'Lineas', 'PATCH'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se puede editar la linea'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     
@@ -61,6 +100,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las lineas activas
                 path: "/api/lineas/activas",
+                options:{
+                    description: 'Peticion de las lineas activas',
+                    tags:['api', 'Lineas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las lineas activas'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -78,6 +131,20 @@ module.exports = {
             {
                 method: "GET",                                  // Peticion de las lineas inactivas
                 path: "/api/lineas/inactivas",
+                options:{
+                    description: 'Peticion de las lineas inactivas',
+                    tags:['api', 'Lineas', 'GET'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudieron consultar las lineas inactivas'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
@@ -95,6 +162,20 @@ module.exports = {
             {
                 method: "POST",                                 // Agregar una Marca
                 path: "/api/lineas",
+                options:{
+                    description: 'Agregar una Marca',
+                    tags:['api', 'Lineas', 'POST'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                200: {description: 'Respuesta positiva del servidor'},
+                                508: {
+                                    description: 'No se pudó agregar una linea'
+                                }
+                            },
+                        }
+                    },
+                },
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     const { nombre } = request.payload
