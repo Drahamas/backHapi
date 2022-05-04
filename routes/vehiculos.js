@@ -10,6 +10,10 @@ module.exports = {
                 path: "/api/vehiculo",
                 handler: (request, h) => {
                     return 'Estas en la sección de Vehículos!'
+                },
+                options:{
+                    description: 'Pagina inicial de los vehículos',
+                    tags:['api', 'Inicio']
                 }
             },
             {
@@ -27,6 +31,10 @@ module.exports = {
                     } finally {
                         cliente.release(true)
                     }
+                },
+                options:{
+                    description: 'Traer los Vehículos de la base de datos',
+                    tags:['api', 'Inicio']
                 }
             },
             {
@@ -56,6 +64,10 @@ module.exports = {
                         console.log(error);
                         return h.response({ error: 'No se pudo agregar un vehículo a la base de datos' }).code(508);
                     }
+                },
+                options:{
+                    description: 'Agregar un Vehículo',
+                    tags:['api', 'Vehículos'],
                 }
             },
             {
