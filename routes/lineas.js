@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const { pool } = require('../config/dataBase');
 
 module.exports = {
@@ -52,6 +53,14 @@ module.exports = {
                     } finally {
                         cliente.release(true)
                     }
+                    validate: {
+                        payload: Joi.object({
+                            nombre: Joi.string().max(30).required,
+                            descripcion: Joi.string().required,
+                            linea_activa: Joi.string().max(4).required,
+                            id_marca: Joi.number(). required,
+                        })
+                    }
                 }
             },
             {
@@ -94,6 +103,14 @@ module.exports = {
                     } catch (error) {
                         console.log(error);
                         return h.response({ error: 'No se puede editar la linea' }).code(508);
+                    }
+                    validate: {
+                        payload: Joi.object({
+                            nombre: Joi.string().max(30).required,
+                            descripcion: Joi.string().required,
+                            linea_activa: Joi.string().max(4).required,
+                            id_marca: Joi.number(). required,
+                        })
                     }
                 }
             },

@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const { pool } = require('../config/dataBase');
 
 
@@ -47,7 +47,7 @@ module.exports = {
                 handler: async(request, h) => {
                     let cliente = await pool.connect();
                     try {
-                        const result = await cliente.query(`SELECT * FROM vehiculos;`);
+                        const result = await cliente.query(`SELECT * FROM vehiculos ORDER BY placa;`);
                         return result.rows
                         
                     } catch (err) {
@@ -83,14 +83,14 @@ module.exports = {
                             "venc_seguro": request.payload.venc_seguro,
                             "venc_tecnicomecanica": request.payload.venc_tecnicomecanica,
                             "color": request.payload.color,
-                            "foto": request.payload.foto,
+                            "foto_vehiuclo": request.payload.foto_vehiuclo,
                             "id_linea": request.payload.id_linea
                         }
                     try {
                         await cliente.query(`
                         INSERT INTO vehiculos
                         VALUES ('${request.payload.placa}', ${request.payload.modelo}, '${request.payload.venc_seguro}', 
-                            '${request.payload.venc_tecnicomecanica}', '${request.payload.color}', '${request.payload.foto}', ${request.payload.id_linea});
+                            '${request.payload.venc_tecnicomecanica}', '${request.payload.color}', '${request.payload.foto_vehiculo}', ${request.payload.id_linea});
                             `)
                         const result = await cliente.query(`SELECT * FROM vehiculos WHERE placa='${ request.payload.placa }';`);
                         return result.rows;
@@ -98,6 +98,17 @@ module.exports = {
                     } catch (error) {
                         console.log(error);
                         return h.response({ error: 'No se pudo agregar un vehículo a la base de datos' }).code(508);
+                    }
+                    validate: {
+                        payload: Joi.object({
+                            placa: Joi.string().max(6).required,
+                            modelo: Joi.number().max(4).required,
+                            venc_seguro: Joi.date().required,
+                            venc_tecnicomecanica: Joi.date().required,
+                            foto_vehiuclo: Joi.string(),
+                            color: Joi.string().required,
+                            id_linea: Joi.number().required,
+                        });
                     }
                 },
             },
@@ -141,6 +152,16 @@ module.exports = {
                     } catch (error) {
                         console.log(error);
                         return h.response({ error: 'No se puede editar el vehículo' }).code(508);
+                    }
+                    validate: {
+                        payload: Joi.object({
+                            modelo: Joi.number(),
+                            venc_seguro: Joi.date(),
+                            venc_tecnicomecanica: Joi.date(),
+                            foto_vehiuclo: Joi.string(),
+                            color: Joi.string(),
+                            id_linea: Joi.number()
+                        });
                     }
                 }
             },

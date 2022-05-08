@@ -9,15 +9,14 @@ const { description } = require('@hapi/joi/lib/base');
 require('dotenv').config();
 
 
+
 const init = async() =>{
 
     const server = new Hapi.Server({
         port: process.env.PORT,
         host: process.env.HOST,
         routes:{
-            files: {
-                relativeTo: path.join(__dirname, 'public')
-            }
+            cors: true,
         }
     });
     // Configure swagger
@@ -72,3 +71,16 @@ const init = async() =>{
 }
 
 init();
+
+// // Librerias de los Sockets
+// const {createServer} = require("http");
+// const { Server } = require("socket.io");
+
+// // Servidor del Socket
+// const httpServer = createServer()
+// const io = new Server(httpServer, {/*Opciones de configuración*/})
+
+// io.on("conection",(socket)=>{
+//     console.log(socket.id);
+// })
+// httpServer.listen(process.env.PORT);

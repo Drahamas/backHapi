@@ -52,6 +52,13 @@ module.exports = {
                     } finally {
                         cliente.release(true)
                     }
+                    validate: {
+                        payload: Joi.object({
+                            nombre: Joi.string().max(30).required,
+                            description: Joi.string().required,
+                            marca_activa: Joi.string().max(4).required,
+                        })
+                    }
                 }
             },
             {
@@ -93,6 +100,13 @@ module.exports = {
                     } catch (error) {
                         console.log(error);
                         return h.response({ error: 'No se puede editar la marca' }).code(508);
+                    }
+                    validate: {
+                        payload: Joi.object({
+                            nombre: Joi.string().max(30).required,
+                            description: Joi.string().required,
+                            marca_activa: Joi.string().max(4).required,
+                        })
                     }
                 }
             },
